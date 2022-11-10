@@ -5,6 +5,8 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     public Transform Eyes;
+    public Transform Feet;
+    public LayerMask Ground;
 
     public float speed;
     public float gravity;
@@ -37,8 +39,16 @@ public class Movement : MonoBehaviour
         }
     }
 
+    void Look()
+    {
+        float x = Input.GetAxis("Mouse X");
+        float y = Input.GetAxis("Mouse Y");
+
+
+    }
+
     bool Grounded()
     {
-        return true;
+        return Physics.SphereCast(Feet.position, .03f, Vector3.up, out RaycastHit a, .03f, Ground);
     }
 }
