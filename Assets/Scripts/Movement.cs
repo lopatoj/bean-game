@@ -10,11 +10,13 @@ public class Movement : MonoBehaviour
     public LayerMask Ground;
 
     public float speed;
+    public float jump;
     public float gravity;
     public float sensitivity;
 
     private Vector3 velocity;
     private int orientation = 1;
+    private float xRot = 0;
 
     void Start()
     {
@@ -28,8 +30,13 @@ public class Movement : MonoBehaviour
     {
         Walk();
         Look();
+        Jump();
 
         Player.Move(velocity);
+
+        Fall();
+
+        Debug.Log(Grounded());
     }
 
     void Walk()
@@ -46,7 +53,22 @@ public class Movement : MonoBehaviour
 
     void Jump()
     {
-        float s = Input.GetAxis("");
+        bool s = Input.GetButton("Jump");
+
+        if(Grounded() && s)
+        {
+            velocity.y = jump;
+        }
+    }
+
+    void Fall()
+    {
+        velocity.y += gravity * Time.deltaTime;
+
+        if(Grounded())
+        {
+            velocity.y = 0f;
+        }
     }
 
     void Look()
@@ -54,16 +76,15 @@ public class Movement : MonoBehaviour
         float x = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
         float y = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
 
-        float xRot = 0;
-        xRot += y;
+        xRot -= y;
         xRot = Mathf.Clamp(xRot, -90, 90);
 
-        transform.Rotate(0, y, 0);
-        Eyes.Rotate(xRot, x, 0);
+        transform.Rotate(0f, x, 0);
+        Eyes.transform.localEulerAngles = new Vector3(xRot, 0f, 0f);
     }
 
     bool Grounded()
     {
-        return Physics.SphereCast(Feet.position, .03f, Vector3.up, out RaycastHit a, .03f, Ground);
+        return Physics.SphereCast(Feet.position, .2f, Vector3.up, out RaycastHit hit, .2f, Ground);
     }
 }
