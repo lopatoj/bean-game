@@ -195,6 +195,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Eyes: {fileID: 963194228}
+  Feet: {fileID: 1884794548}
+  Ground:
+    serializedVersion: 2
+    m_Bits: 64
   speed: 8
   gravity: -4
 --- !u!143 &411392980

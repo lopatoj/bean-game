@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    private CharacterController Player;
     public Transform Eyes;
     public Transform Feet;
     public LayerMask Ground;
@@ -18,13 +19,16 @@ public class Movement : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        Player = GetComponent<CharacterController>();
     }
 
     void Update()
     {
         Walk();
+        Look();
 
-        GetComponent<CharacterController>().Move(velocity);
+        Player.Move(velocity);
     }
 
     void Walk()
