@@ -11,6 +11,7 @@ public class Movement : MonoBehaviour
 
     public float speed;
     public float gravity;
+    public float sensitivity;
 
     private Vector3 velocity;
     private int orientation = 1;
@@ -43,12 +44,22 @@ public class Movement : MonoBehaviour
         }
     }
 
+    void Jump()
+    {
+        float s = Input.GetAxis("");
+    }
+
     void Look()
     {
-        float x = Input.GetAxis("Mouse X");
-        float y = Input.GetAxis("Mouse Y");
+        float x = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
+        float y = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
 
+        float xRot = 0;
+        xRot += y;
+        xRot = Mathf.Clamp(xRot, -90, 90);
 
+        transform.Rotate(0, y, 0);
+        Eyes.Rotate(xRot, x, 0);
     }
 
     bool Grounded()
