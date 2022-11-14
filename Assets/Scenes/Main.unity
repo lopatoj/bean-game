@@ -278,7 +278,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   speed: 8
-  jump: 0
+  jump: 100
   gravity: -4
   sensitivity: 50
 --- !u!143 &411392980

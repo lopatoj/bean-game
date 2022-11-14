@@ -85,6 +85,6 @@ public class Movement : MonoBehaviour
 
     bool Grounded()
     {
-        return Physics.SphereCast(Feet.position, .2f, Vector3.up, out RaycastHit hit, .2f, Ground);
+        return Physics.SphereCast(Feet.position, 1f, Vector3.forward, out RaycastHit hit, 1f, Ground);
     }
 }
