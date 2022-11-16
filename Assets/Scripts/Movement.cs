@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class Movement : MonoBehaviour
 {
@@ -11,9 +13,13 @@ public class Movement : MonoBehaviour
 
     public float speed;
     public float gravity;
+    public float jump;
+    public float sensitivity;
 
     private Vector3 velocity;
     private int orientation = 1;
+    private float verticalRotation = 0f;
+    bool grounded = false;
 
     void Start()
     {
@@ -25,34 +31,69 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        Walk();
-        Look();
+        GroundCheck();
+        Looking();
+        Walking();
+        Falling();
+        Jumping();
 
-        Player.Move(velocity);
+        Player.Move(velocity * Time.deltaTime);
     }
 
-    void Walk()
+    void GroundCheck()
+    {
+        grounded = Physics.CheckSphere(Feet.position, .2f, Ground);
+    }
+
+    void UpCheck()
+    {
+
+    }
+
+    void Looking()
+    {
+        float x = Input.GetAxis("Mouse X") * Time.deltaTime * sensitivity;
+        float y = Input.GetAxis("Mouse Y") * Time.deltaTime * sensitivity;
+
+        verticalRotation -= y;
+        verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
+
+        Eyes.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * x);
+    }
+
+    void Walking()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        if(Grounded())
+        Vector3 move = transform.forward * v + transform.right * h;
+
+        float temp = velocity.y;
+        velocity += 5f * move * speed * orientation * Time.deltaTime * (grounded ? 1f : 0.3f);
+        velocity.y = temp;
+
+        if(grounded)
         {
-            velocity.x = h * speed * Time.deltaTime * orientation;
-            velocity.y = h * speed * Time.deltaTime * orientation;
+
         }
     }
 
-    void Look()
+    void Jumping()
     {
-        float x = Input.GetAxis("Mouse X");
-        float y = Input.GetAxis("Mouse Y");
-
-
+        if (grounded && Input.GetButton("Jump"))
+        {
+            velocity.y = jump;
+        }
     }
 
-    bool Grounded()
+    void Falling()
     {
-        return Physics.SphereCast(Feet.position, .03f, Vector3.up, out RaycastHit a, .03f, Ground);
+        velocity.y += gravity * Time.deltaTime;
+
+        if (grounded)
+        {
+            velocity.y = 0f;
+        }
     }
 }
