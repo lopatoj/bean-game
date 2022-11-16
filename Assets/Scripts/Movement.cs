@@ -21,7 +21,6 @@ public class Movement : MonoBehaviour
     private int orientation2 = 1;
     private float sprinting = 1f;
     private float verticalRotation = 0f;
-    private float angle = 1f;
     bool grounded = false;
 
     void Start()
@@ -40,7 +39,6 @@ public class Movement : MonoBehaviour
         Looking();
         Walking();
         Falling();
-        Jumping();
 
         Player.Move(velocity * Time.deltaTime);
     }
@@ -120,7 +118,7 @@ public class Movement : MonoBehaviour
 
     void Falling()
     {
-        velocity.y += gravity * orientation2 * angle * Time.deltaTime;
+        velocity.y += gravity * orientation2 * (grounded ? 0f : 1f) * Time.deltaTime;
 
         if (grounded && orientation2 == orientation)
         {
