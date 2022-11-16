@@ -18,6 +18,7 @@ public class Movement : MonoBehaviour
 
     private Vector3 velocity;
     private int orientation = 1;
+    private float sprinting = 1f;
     private float verticalRotation = 0f;
     bool grounded = false;
 
@@ -32,6 +33,8 @@ public class Movement : MonoBehaviour
     void Update()
     {
         GroundCheck();
+        UpCheck();
+        SprintCheck();
         Looking();
         Walking();
         Falling();
@@ -42,12 +45,36 @@ public class Movement : MonoBehaviour
 
     void GroundCheck()
     {
-        grounded = Physics.CheckSphere(Feet.position, .2f, Ground);
+        Vector3 feetPosition = new Vector3(0f, Feet.position.y * orientation, 0f);
+
+        grounded = Physics.CheckSphere(feetPosition, .2f, Ground);
     }
 
     void UpCheck()
     {
+        //Debug.Log(verticalRotation % 360);
 
+        float rotation = verticalRotation % 360;
+
+        if (rotation > 90f && rotation < 270f)
+        {
+            orientation = -1;
+        } 
+        else if(rotation < 90f ^ rotation > 270f)
+        {
+            orientation = 1;
+        }
+        else
+        {
+            orientation = 1;
+        }
+
+        Debug.Log(orientation);
+    }
+
+    void SprintCheck()
+    {
+        sprinting = Input.GetButton("Shift") ? 1.3f : 1f;
     }
 
     void Looking()
@@ -56,40 +83,34 @@ public class Movement : MonoBehaviour
         float y = Input.GetAxis("Mouse Y") * Time.deltaTime * sensitivity;
 
         verticalRotation -= y;
-        verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
 
         Eyes.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * x);
+        transform.Rotate(Vector3.up * x * orientation);
     }
 
     void Walking()
     {
         float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float v = Input.GetAxis("Vertical") * orientation;
 
         Vector3 move = transform.forward * v + transform.right * h;
 
         float temp = velocity.y;
-        velocity += 5f * move * speed * orientation * Time.deltaTime * (grounded ? 1f : 0.3f);
+        velocity = move * speed * sprinting;
         velocity.y = temp;
-
-        if(grounded)
-        {
-
-        }
     }
 
     void Jumping()
     {
         if (grounded && Input.GetButton("Jump"))
         {
-            velocity.y = jump;
+            velocity.y = jump * orientation;
         }
     }
 
     void Falling()
     {
-        velocity.y += gravity * Time.deltaTime;
+        velocity.y += gravity * orientation * Time.deltaTime;
 
         if (grounded)
         {
