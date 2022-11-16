@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class Movement : MonoBehaviour
 {
@@ -10,13 +12,15 @@ public class Movement : MonoBehaviour
     public LayerMask Ground;
 
     public float speed;
-    public float jump;
     public float gravity;
+    public float jump;
     public float sensitivity;
 
     private Vector3 velocity;
     private int orientation = 1;
-    private float xRot = 0;
+    private float sprinting = 1f;
+    private float verticalRotation = 0f;
+    bool grounded = false;
 
     void Start()
     {
@@ -28,63 +32,89 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        Walk();
-        Look();
-        Jump();
+        GroundCheck();
+        UpCheck();
+        SprintCheck();
+        Looking();
+        Walking();
+        Falling();
+        Jumping();
 
-        Player.Move(velocity);
-
-        Fall();
-
-        Debug.Log(Grounded());
+        Player.Move(velocity * Time.deltaTime);
     }
 
-    void Walk()
+    void GroundCheck()
+    {
+        Vector3 feetPosition = new Vector3(Feet.position.x, Feet.position.y * orientation, Feet.position.z);
+
+        grounded = Physics.CheckSphere(feetPosition, .1f, Ground);
+    }
+
+    void UpCheck()
+    {
+        Debug.Log(verticalRotation % 360);
+
+        float rotation = verticalRotation % 360;
+
+        if (rotation > 90f && rotation < 270f)
+        {
+            orientation = -1;
+        } 
+        else if(rotation < 90f ^ rotation > 270f)
+        {
+            orientation = 1;
+        } 
+        else
+        {
+            orientation = 1;
+        }
+
+        Debug.Log(orientation);
+    }
+
+    void SprintCheck()
+    {
+        sprinting = Input.GetButton("Shift") ? 1.3f : 1f;
+    }
+
+    void Looking()
+    {
+        float x = Input.GetAxis("Mouse X") * Time.deltaTime * sensitivity;
+        float y = Input.GetAxis("Mouse Y") * Time.deltaTime * sensitivity;
+
+        verticalRotation -= y;
+
+        Eyes.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * x * orientation);
+    }
+
+    void Walking()
     {
         float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float v = Input.GetAxis("Vertical") * orientation;
 
-        if(Grounded())
+        Vector3 move = transform.forward * v + transform.right * h;
+
+        float temp = velocity.y;
+        velocity = move * speed * sprinting;
+        velocity.y = temp;
+    }
+
+    void Jumping()
+    {
+        if (grounded && Input.GetButton("Jump"))
         {
-            velocity.x = h * speed * Time.deltaTime * orientation;
-            velocity.y = h * speed * Time.deltaTime * orientation;
+            velocity.y = jump * orientation;
         }
     }
 
-    void Jump()
+    void Falling()
     {
-        bool s = Input.GetButton("Jump");
+        velocity.y += gravity * orientation * Time.deltaTime;
 
-        if(Grounded() && s)
-        {
-            velocity.y = jump;
-        }
-    }
-
-    void Fall()
-    {
-        velocity.y += gravity * Time.deltaTime;
-
-        if(Grounded())
+        if (grounded)
         {
             velocity.y = 0f;
         }
-    }
-
-    void Look()
-    {
-        float x = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
-        float y = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
-
-        xRot -= y;
-        xRot = Mathf.Clamp(xRot, -90, 90);
-
-        transform.Rotate(0f, x, 0);
-        Eyes.transform.localEulerAngles = new Vector3(xRot, 0f, 0f);
-    }
-
-    bool Grounded()
-    {
-        return Physics.SphereCast(Feet.position, 1f, Vector3.forward, out RaycastHit hit, 1f, Ground);
     }
 }
