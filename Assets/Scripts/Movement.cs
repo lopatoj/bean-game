@@ -18,8 +18,10 @@ public class Movement : MonoBehaviour
 
     private Vector3 velocity;
     private int orientation = 1;
+    private int orientation2 = 1;
     private float sprinting = 1f;
     private float verticalRotation = 0f;
+    private float angle = 1f;
     bool grounded = false;
 
     void Start()
@@ -45,13 +47,16 @@ public class Movement : MonoBehaviour
 
     void GroundCheck()
     {
-        Vector3 feetPosition = new Vector3(Feet.position.x, Feet.position.y * orientation, Feet.position.z);
-
-        grounded = Physics.CheckSphere(feetPosition, .1f, Ground);
+        //grounded = Physics.SphereCheck(Feet, .1f, Ground);
     }
 
     void UpCheck()
     {
+        while (verticalRotation < 0f)
+        {
+            verticalRotation += 360f;
+        }
+
         Debug.Log(verticalRotation % 360);
 
         float rotation = verticalRotation % 360;
@@ -63,13 +68,18 @@ public class Movement : MonoBehaviour
         else if(rotation < 90f ^ rotation > 270f)
         {
             orientation = 1;
-        } 
-        else
-        {
-            orientation = 1;
         }
 
-        Debug.Log(orientation);
+        if (rotation > 0f && rotation < 180f)
+        {
+            orientation2 = 1;
+        }
+        else if (rotation > 180f && rotation < 360f)
+        {
+            orientation2 = -1;
+        }
+
+        //Debug.Log(orientation);
     }
 
     void SprintCheck()
@@ -110,11 +120,27 @@ public class Movement : MonoBehaviour
 
     void Falling()
     {
-        velocity.y += gravity * orientation * Time.deltaTime;
+        velocity.y += gravity * orientation2 * angle * Time.deltaTime;
 
-        if (grounded)
+        if (grounded && orientation2 == orientation)
         {
             velocity.y = 0f;
+        }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.layer.Equals(Ground))
+        {
+            grounded = true;
+        }
+    }
+
+    void OnCollisionExit(Collision col)
+    {
+        if (col.gameObject.layer.Equals(Ground))
+        {
+            grounded = false;
         }
     }
 }
