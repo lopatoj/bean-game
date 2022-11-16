@@ -45,14 +45,14 @@ public class Movement : MonoBehaviour
 
     void GroundCheck()
     {
-        Vector3 feetPosition = new Vector3(0f, Feet.position.y * orientation, 0f);
+        Vector3 feetPosition = new Vector3(Feet.position.x, Feet.position.y * orientation, Feet.position.z);
 
-        grounded = Physics.CheckSphere(feetPosition, .2f, Ground);
+        grounded = Physics.CheckSphere(feetPosition, .1f, Ground);
     }
 
     void UpCheck()
     {
-        //Debug.Log(verticalRotation % 360);
+        Debug.Log(verticalRotation % 360);
 
         float rotation = verticalRotation % 360;
 
@@ -63,7 +63,7 @@ public class Movement : MonoBehaviour
         else if(rotation < 90f ^ rotation > 270f)
         {
             orientation = 1;
-        }
+        } 
         else
         {
             orientation = 1;
