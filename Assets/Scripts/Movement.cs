@@ -138,7 +138,7 @@ public class Movement : MonoBehaviour
         }
     }
 
-    // 
+    // If Player is not standing on Ground, then apply gravitational acceleration relative to orientation of player
     void Falling()
     {
         if (grounded && gravityDirection != playerOrientation)
@@ -147,7 +147,7 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            velocity.y += gravityAcceleration * gravityDirection * Time.deltaTime;
+            velocity.y -= gravityAcceleration * gravityDirection * Time.deltaTime;
         }
     }
 }
