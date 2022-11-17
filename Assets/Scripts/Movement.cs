@@ -6,9 +6,6 @@ using UnityEngine.Experimental.GlobalIllumination;
 
 public class Movement : MonoBehaviour
 {
-    // Constant multiplier that matches mouse sensitivity values to other similar games
-    private const float standardMultiplier = 26.33405852f;
-
     // Objects from game scene that need to be referenced by this class
     private CharacterController Player;
     public Transform Camera;
@@ -29,9 +26,12 @@ public class Movement : MonoBehaviour
     // Private values that change every frame based on rotation & collisions
     private int playerOrientation = 1;
     private int gravityDirection = 1;
-    bool grounded = false;
+    private bool grounded = false;
+    
+    // Constant multiplier that matches mouse sensitivity values to other similar games
+    private const float standardMultiplier = 26.33405852f;
 
-    // Runs at start of game
+    // Runs before first frame
     void Start()
     {
         // Keeps mouse cursor in center of screen & hides it
@@ -47,56 +47,65 @@ public class Movement : MonoBehaviour
     {
         //Debug.Log("playerOrientation: " + (playerOrientation == 1 ? "Up" : "Down"));
         //Debug.Log("gravityDirection: " + (gravityDirection == 1 ? "Up" : "Down"));
-        Debug.Log("grounded: " + (grounded ? "Yes" : "No"));
+        //Debug.Log("grounded: " + (grounded ? "Yes" : "No"));
 
-        // 
-        CollisionCheck();
+        // Tests for orientation of Camera and whether Player is standing on Ground
         OrientationCheck();
+        CollisionCheck();
 
+        // Applies translation and rotation to Player and Camera based on input
         Looking();
         Walking();
         Falling();
         Jumping();
 
-        // Applies velocity to player multiplied by time passed since last frame()
+        // Applies velocity to player multiplied by time passed since last frame
         Player.Move(velocity * Time.deltaTime);
-    }
-
-    void CollisionCheck()
-    {
-        grounded = Physics.CheckCapsule(transform.position + transform.up * .6f, transform.position - transform.up * .6f, .49f, Ground);
     }
 
     void OrientationCheck()
     {
+        // While loops make sure verticalRotation is between 0 and 360
         while (verticalRotation < 0f)
         {
             verticalRotation += 360f;
         }
 
+        while (verticalRotation > 360f)
+        {
+            verticalRotation -= 360f;
+        }
+
         //Debug.Log(verticalRotation % 360);
 
-        float rotation = verticalRotation % 360;
-
-        if (rotation > 90f && rotation < 270f)
-        {
-            playerOrientation = -1;
-        } 
-        else if(rotation < 90f ^ rotation > 270f)
+        // If Camera is facing forward relative to Player, then orientation = 1, else orientation = -1
+        if (verticalRotation < 90f ^ verticalRotation > 270f)
         {
             playerOrientation = 1;
         }
+        else if (verticalRotation > 90f && verticalRotation < 270f)
+        {
+            playerOrientation = -1;
+        }
 
-        if (rotation > 0f && rotation < 180f)
+        // If Camera is facing up relative to Player, then orientation = 1, else orientation = -1
+        if (verticalRotation > 180f && verticalRotation < 360f)
         {
             gravityDirection = 1;
         }
-        else if (rotation > 180f && rotation < 360f)
+        else if (verticalRotation > 0f && verticalRotation < 180f)
         {
             gravityDirection = -1;
         }
     }
 
+    // If any object of the layer Ground is present beneath Player, then Player is standing on ground and therefore grounded = true, else grounded = false
+    void CollisionCheck()
+    {
+        grounded = Physics.CheckCapsule(transform.position + transform.up * .6f, transform.position - transform.up * .6f, .49f, Ground);
+    }
+
+    // Rotates camera vertically (about x axis) based on mouse Y movement and rotates player horizontally (about y axis) based on mouse X movement
     void Looking()
     {
         float x = Input.GetAxis("Mouse X") * mouseSensitivity * standardMultiplier * Time.deltaTime;
@@ -108,6 +117,7 @@ public class Movement : MonoBehaviour
         transform.Rotate(Vector3.up * x * playerOrientation);
     }
 
+    // Translates player horizontally if W-A-S-D keys are pressed
     void Walking()
     {
         float h = Input.GetAxis("Horizontal");
@@ -119,6 +129,7 @@ public class Movement : MonoBehaviour
         velocity.z = move.z * walkSpeed;
     }
 
+    // If Player is standing on Ground and space key is pressed, then Y velocity is set to the initial jump speed * orientation of Player
     void Jumping()
     {
         if (grounded && Input.GetButton("Jump"))
@@ -127,15 +138,16 @@ public class Movement : MonoBehaviour
         }
     }
 
+    // 
     void Falling()
     {
-        if (grounded && gravityDirection == playerOrientation)
+        if (grounded && gravityDirection != playerOrientation)
         {
             velocity.y = 0f;
         }
         else
         {
-            velocity.y -= gravityAcceleration * gravityDirection * Time.deltaTime;
+            velocity.y += gravityAcceleration * gravityDirection * Time.deltaTime;
         }
     }
 }
