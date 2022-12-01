@@ -9,7 +9,9 @@ public class Movement : MonoBehaviour
     // Objects from game scene that need to be referenced by this class
     private CharacterController Player;
     public Transform Camera;
+    public Transform Center;
     public LayerMask Ground;
+    public LayerMask User;
 
     // Multiplier values initialized in Unity script menu
     public float walkSpeed;
@@ -19,6 +21,7 @@ public class Movement : MonoBehaviour
 
     // Velocity applied to player each frame
     private Vector3 velocity;
+    private Vector3 previousVelocity;
 
     // Rotation value about x axis of camera
     private float verticalRotation = 0f;
@@ -27,6 +30,7 @@ public class Movement : MonoBehaviour
     private int playerOrientation = 1;
     private int gravityDirection = 1;
     private bool grounded = false;
+    private float pastX = 0f;
     
     // Constant multiplier that matches mouse sensitivity values to other similar games
     private const float standardMultiplier = 26.33405852f;
@@ -52,6 +56,7 @@ public class Movement : MonoBehaviour
         // Tests for orientation of Camera and whether Player is standing on Ground
         OrientationCheck();
         CollisionCheck();
+        BoundsCheck();
 
         // Applies translation and rotation to Player and Camera based on input
         Looking();
@@ -99,6 +104,14 @@ public class Movement : MonoBehaviour
         }
     }
 
+    void BoundsCheck()
+    {
+        if(!Physics.CheckSphere(Center.position, 3f, User))
+        {
+            transform.Translate(Center.position - transform.position);
+        }
+    }
+
     // If any object of the layer Ground is present beneath Player, then Player is standing on ground and therefore grounded = true, else grounded = false
     void CollisionCheck()
     {
@@ -127,6 +140,8 @@ public class Movement : MonoBehaviour
 
         velocity.x = move.x * walkSpeed;
         velocity.z = move.z * walkSpeed;
+
+        pastX = v;
     }
 
     // If Player is standing on Ground and space key is pressed, then Y velocity is set to the initial jump speed * orientation of Player
@@ -147,7 +162,7 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            velocity.y -= gravityAcceleration * gravityDirection * Time.deltaTime;
+            velocity.y += gravityAcceleration * gravityDirection * Time.deltaTime;
         }
     }
 }
