@@ -115,7 +115,7 @@ public class Movement : MonoBehaviour
     // If any object of the layer Ground is present beneath Player, then Player is standing on ground and therefore grounded = true, else grounded = false
     void CollisionCheck()
     {
-        grounded = Physics.CheckCapsule(transform.position + transform.up * .6f, transform.position - transform.up * .6f, .49f, Ground);
+        grounded = Physics.CheckSphere(transform.position - transform.up * playerOrientation, .1f, Ground);
     }
 
     // Rotates camera vertically (about x axis) based on mouse Y movement and rotates player horizontally (about y axis) based on mouse X movement
@@ -162,7 +162,10 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            velocity.y += gravityAcceleration * gravityDirection * Time.deltaTime;
+            velocity.y -= gravityAcceleration * playerOrientation * Time.deltaTime;
+
+            // Air Resistence
+            velocity.y -= .4f * velocity.y * Time.deltaTime;
         }
     }
 }
