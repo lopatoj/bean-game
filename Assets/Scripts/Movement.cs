@@ -6,6 +6,8 @@ using UnityEngine.Experimental.GlobalIllumination;
 
 public class Movement : MonoBehaviour
 {
+    public Global Global;
+
     // Objects from game scene that need to be referenced by this class
     private CharacterController Player;
     public Transform Camera;
@@ -17,7 +19,6 @@ public class Movement : MonoBehaviour
     public float walkSpeed;
     public float gravityAcceleration;
     public float jumpSpeed;
-    public float mouseSensitivity;
 
     // Velocity applied to player each frame
     private Vector3 velocity;
@@ -33,15 +34,11 @@ public class Movement : MonoBehaviour
     private float pastX = 0f;
     
     // Constant multiplier that matches mouse sensitivity values to other similar games
-    private const float standardMultiplier = 26.33405852f;
+    private const float standardMultiplier = 60f;
 
     // Runs before first frame
     void Start()
     {
-        // Keeps mouse cursor in center of screen & hides it
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         // Assigns CharacterController component of the object this script is assigned to to variable Player
         Player = GetComponent<CharacterController>();
     }
@@ -121,8 +118,8 @@ public class Movement : MonoBehaviour
     // Rotates camera vertically (about x axis) based on mouse Y movement and rotates player horizontally (about y axis) based on mouse X movement
     void Looking()
     {
-        float x = Input.GetAxis("Mouse X") * mouseSensitivity * standardMultiplier * Time.deltaTime;
-        float y = Input.GetAxis("Mouse Y") * mouseSensitivity * standardMultiplier * Time.deltaTime;
+        float x = Input.GetAxis("Mouse X") * Global.sensitivity * standardMultiplier * Time.deltaTime;
+        float y = Input.GetAxis("Mouse Y") * Global.sensitivity * standardMultiplier * Time.deltaTime;
 
         verticalRotation -= y;
 
