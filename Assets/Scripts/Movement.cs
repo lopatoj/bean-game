@@ -103,10 +103,10 @@ public class Movement : MonoBehaviour
 
     void BoundsCheck()
     {
-        if(!Physics.CheckSphere(Center.position, 3f, User))
-        {
-            transform.Translate(Center.position - transform.position);
-        }
+        if(Physics.CheckSphere(Vector3.zero, 3f, User))
+            return;
+            
+        transform.Translate(Center.position - transform.position);
     }
 
     // If any object of the layer Ground is present beneath Player, then Player is standing on ground and therefore grounded = true, else grounded = false
