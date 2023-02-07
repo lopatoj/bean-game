@@ -19,6 +19,6 @@ public class Throw : MonoBehaviour
     }
 
     void Launch() {
-        
+        Instantiate();
     }
 }
