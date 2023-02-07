@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414729, b: 0.121078685, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1706,7 +1706,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 776315461}
-  - component: {fileID: 776315462}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -1737,25 +1736,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1200, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &776315462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776315460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6eb4fcd28eab3144bf507bf851b6004, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Global: {fileID: 0}
-  VolumeSlider: {fileID: 0}
-  FOVSlider: {fileID: 0}
-  SensSlider: {fileID: 0}
-  VolumeSliderValue: {fileID: 0}
-  FOVSliderValue: {fileID: 0}
-  SensSliderValue: {fileID: 0}
 --- !u!1 &883729127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1765,7 +1745,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 883729128}
-  - component: {fileID: 883729129}
   m_Layer: 5
   m_Name: Main
   m_TagString: Untagged
@@ -1795,25 +1774,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1200, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &883729129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 883729127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6eb4fcd28eab3144bf507bf851b6004, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Global: {fileID: 0}
-  VolumeSlider: {fileID: 0}
-  FOVSlider: {fileID: 0}
-  SensSlider: {fileID: 0}
-  VolumeSliderValue: {fileID: 0}
-  FOVSliderValue: {fileID: 0}
-  SensSliderValue: {fileID: 0}
 --- !u!1 &928768807
 GameObject:
   m_ObjectHideFlags: 0
@@ -2707,7 +2667,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 883729129}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Menu, Assembly-CSharp
         m_MethodName: StartGame
         m_Mode: 1
@@ -3624,7 +3584,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 883729129}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Menu, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1

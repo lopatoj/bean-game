@@ -19,10 +19,6 @@ public class Menu : MonoBehaviour
 
     void Start()
     {
-        Global.volume = 1;
-        Global.fov = 90;
-        Global.sensitivity = 4;
-
         VolumeSlider.value = Global.volume;
         FOVSlider.value = Global.fov;
         SensSlider.value = Global.sensitivity;
