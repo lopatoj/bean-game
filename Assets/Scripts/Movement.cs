@@ -74,7 +74,7 @@ public class Movement : MonoBehaviour
         Player.Move(velocity * Time.deltaTime);
     }
 
-    void OrientationCheck()
+    private void OrientationCheck()
     {
         // While loops make sure verticalRotation is between 0 and 360
         while (verticalRotation < 0f)
@@ -110,7 +110,7 @@ public class Movement : MonoBehaviour
         }
     }
 
-    void BoundsCheck()
+    private void BoundsCheck()
     {
         if(Physics.CheckSphere(Vector3.zero, 3f, User))
             return;
@@ -119,13 +119,13 @@ public class Movement : MonoBehaviour
     }
 
     // If any object of the layer Ground is present beneath Player, then Player is standing on ground and therefore grounded = true, else grounded = false
-    void CollisionCheck()
+    private void CollisionCheck()
     {
         grounded = Physics.CheckSphere(transform.position - transform.up * playerOrientation, .1f, Ground);
     }
 
     // Rotates camera vertically (about x axis) based on mouse Y movement and rotates player horizontally (about y axis) based on mouse X movement
-    void Looking()
+    private void Looking()
     {
         float x = Input.GetAxis("Mouse X") * Global.sensitivity * standardMultiplier * Time.deltaTime;
         float y = Input.GetAxis("Mouse Y") * Global.sensitivity * standardMultiplier * Time.deltaTime;
@@ -137,7 +137,7 @@ public class Movement : MonoBehaviour
     }
 
     // Translates player horizontally if W-A-S-D keys are pressed
-    void Walking()
+    private void Walking()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical") * playerOrientation;
@@ -149,7 +149,7 @@ public class Movement : MonoBehaviour
     }
 
     // If Player is standing on Ground and space key is pressed, then Y velocity is set to the initial jump speed * orientation of Player
-    void Jumping()
+    private void Jumping()
     {
         if (grounded && Input.GetButton("Jump"))
         {
@@ -158,7 +158,7 @@ public class Movement : MonoBehaviour
     }
 
     // If Player is not standing on Ground, then apply gravitational acceleration relative to orientation of player
-    void Falling()
+    private void Falling()
     {
         if (grounded && gravityDirection != playerOrientation)
         {
@@ -171,5 +171,10 @@ public class Movement : MonoBehaviour
             // Air Resistence
             velocity.y -= .4f * velocity.y * Time.deltaTime;
         }
+    }
+
+    public Vector3 GetVelocity()
+    {
+        return velocity;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,6 @@ public class Root : MonoBehaviour
 
     void Start()
     {
-        Eyes.fieldOfView = Global.fov;
         paused = false;
 
         // Keeps mouse cursor in center of screen & hides it
@@ -24,6 +24,23 @@ public class Root : MonoBehaviour
 
     void Update()
     {
+        Eyes.fieldOfView = Global.fov;
+
+        if (SceneManager.GetSceneByBuildIndex(1).isLoaded)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Time.timeScale = 0;
+            paused = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Time.timeScale = 1;
+            paused = false;
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Pause();
@@ -34,21 +51,11 @@ public class Root : MonoBehaviour
     {
         if(!paused)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Time.timeScale = 0;
             SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
-
-            paused = true;
         }
         else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            Time.timeScale = 1;
+        { 
             SceneManager.UnloadSceneAsync(1);
-
-            paused = false;
         }
     }
 }
