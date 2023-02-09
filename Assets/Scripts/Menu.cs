@@ -26,6 +26,8 @@ public class Menu : MonoBehaviour
 
     void Start()
     {
+        //Global = SaveSystem.LoadGlobals();
+
         VolumeSlider.value = Global.volume;
         FOVSlider.value = Global.fov;
         SensSlider.value = Global.sensitivity;
@@ -47,16 +49,19 @@ public class Menu : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene(2, LoadSceneMode.Single);
+        //SaveSystem.SaveGlobals(Global);
     }
 
     public void QuitGame()
     {
         Application.Quit();
+        //SaveSystem.SaveGlobals(Global);
     }
 
     public void ResumeGame()
     {
         SceneManager.UnloadSceneAsync(1);
+        //SaveSystem.SaveGlobals(Global);
     }
 
     public void ReturnToMenu()
