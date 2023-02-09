@@ -6,14 +6,20 @@ using UnityEngine.Experimental.GlobalIllumination;
 
 public class Movement : MonoBehaviour
 {
-    public Global Global;
+    [SerializeField]
+    private Global Global;
 
     // Objects from game scene that need to be referenced by this class
+    [SerializeField]
     private CharacterController Player;
-    public Transform Camera;
-    public Transform Center;
-    public LayerMask Ground;
-    public LayerMask User;
+    [SerializeField]
+    private Transform Camera;
+    [SerializeField]
+    private Transform Center;
+    [SerializeField]
+    private LayerMask Ground;
+    [SerializeField]
+    private LayerMask User;
 
     // Multiplier values initialized in Unity script menu
     public float walkSpeed;
@@ -22,16 +28,14 @@ public class Movement : MonoBehaviour
 
     // Velocity applied to player each frame
     private Vector3 velocity;
-    private Vector3 previousVelocity;
 
     // Rotation value about x axis of camera
-    private float verticalRotation = 0f;
+    private float verticalRotation;
 
     // Private values that change every frame based on rotation & collisions
-    private int playerOrientation = 1;
-    private int gravityDirection = 1;
-    private bool grounded = false;
-    private float pastX = 0f;
+    private int playerOrientation;
+    private int gravityDirection;
+    private bool grounded;
     
     // Constant multiplier that matches mouse sensitivity values to other similar games
     private const float standardMultiplier = 60f;
@@ -41,6 +45,11 @@ public class Movement : MonoBehaviour
     {
         // Assigns CharacterController component of the object this script is assigned to to variable Player
         Player = GetComponent<CharacterController>();
+
+        verticalRotation = 0f;
+        playerOrientation = 1;
+        gravityDirection = 1;
+        grounded = false;
     }
 
     // Runs every frame
@@ -137,8 +146,6 @@ public class Movement : MonoBehaviour
 
         velocity.x = move.x * walkSpeed;
         velocity.z = move.z * walkSpeed;
-
-        pastX = v;
     }
 
     // If Player is standing on Ground and space key is pressed, then Y velocity is set to the initial jump speed * orientation of Player
