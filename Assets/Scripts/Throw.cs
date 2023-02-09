@@ -19,6 +19,6 @@ public class Throw : MonoBehaviour
     }
 
     void Launch() {
-        Instantiate();
+        Instantiate(bean, new Vector3(0, 0, 0), transform.rotation);
     }
 }
