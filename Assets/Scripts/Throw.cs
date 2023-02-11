@@ -4,7 +4,21 @@ using UnityEngine;
 
 public class Throw : MonoBehaviour
 {
-    public GameObject bean;
+    [SerializeField]
+    private GameObject Bean;
+    [SerializeField]
+    private Transform Hand;
+    [SerializeField]
+    private GameObject Player;
+
+    [SerializeField]
+    private float force;
+    [SerializeField]
+    private float cooldown;
+    [SerializeField]
+    private float lifetime;
+
+    private float throwTimer;
 
     void Start()
     {
@@ -13,12 +27,22 @@ public class Throw : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetAxis("Fire1") == 1) {
+        if(Input.GetAxis("Fire1") == 1 && throwTimer > cooldown) 
+        {
             Launch();
+            throwTimer = 0f;
         }
+
+        throwTimer += Time.deltaTime;
     }
 
-    void Launch() {
-        Instantiate(bean, new Vector3(0, 0, 0), transform.rotation);
+    private void Launch() 
+    {
+        GameObject b = Instantiate(Bean, Hand.position, Random.rotation);
+
+        b.GetComponent<Rigidbody>().AddForce(transform.forward * force + Player.GetComponent<CharacterController>().velocity, ForceMode.VelocityChange);
+        b.GetComponent<Rigidbody>().AddTorque(Random.rotation.eulerAngles);
+
+        Destroy(b, lifetime);
     }
 }
