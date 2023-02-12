@@ -74,6 +74,7 @@
       <Path>Temp</Path>
       <Path>UnityPlayerStub</Path>
       <Path>UserSettings</Path>
+      <Path>build_Data</Path>
       <Path>obj</Path>
     </explicitExcludes>
   </component>

@@ -5,7 +5,7 @@ public class Root : MonoBehaviour
 {
     [SerializeField] private Camera Eyes;
 
-    [SerializeField] private Global Global;
+    [SerializeField] private Global.Global Global;
 
     private bool _paused;
 

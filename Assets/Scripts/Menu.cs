@@ -9,7 +9,7 @@ public class Menu : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI FOVSliderValue;
 
-    [SerializeField] private Global Global;
+    [SerializeField] private Global.Global Global;
 
     [SerializeField] private Slider SensSlider;
 
@@ -19,9 +19,15 @@ public class Menu : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI VolumeSliderValue;
 
+    private GameData _game;
+
     private void Start()
     {
-        //Global = SaveSystem.LoadGlobals();
+        _game = SaveSystem.Load();
+
+        Global.volume = _game.volume;
+        Global.fov = _game.fov;
+        Global.sensitivity = _game.sensitivity;
 
         VolumeSlider.value = Global.volume;
         FOVSlider.value = Global.fov;
@@ -44,19 +50,19 @@ public class Menu : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene(2, LoadSceneMode.Single);
-        //SaveSystem.SaveGlobals(Global);
+        SaveSystem.Save(Global);
     }
 
     public void QuitGame()
     {
         Application.Quit();
-        //SaveSystem.SaveGlobals(Global);
+        SaveSystem.Save(Global);
     }
 
     public void ResumeGame()
     {
         SceneManager.UnloadSceneAsync(1);
-        //SaveSystem.SaveGlobals(Global);
+        SaveSystem.Save(Global);
     }
 
     public void ReturnToMenu()

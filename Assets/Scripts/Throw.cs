@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Throw : MonoBehaviour
 {
@@ -14,21 +16,25 @@ public class Throw : MonoBehaviour
 
     [SerializeField] private GameObject Player;
 
-    private float throwTimer;
+    private float _throwTimer;
 
     private void Start()
     {
+        
     }
 
     private void Update()
     {
-        if (Input.GetAxis("Fire1") == 1 && throwTimer > cooldown)
+        if (Input.GetAxis("Fire1") >= 1 && _throwTimer > cooldown)
         {
-            Launch();
-            throwTimer = 0f;
+            Action launch = Launch;
+            
+            launch();
+            
+            _throwTimer = 0f;
         }
 
-        throwTimer += Time.deltaTime;
+        _throwTimer += Time.deltaTime;
     }
 
     private void Launch()

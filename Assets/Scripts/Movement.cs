@@ -20,7 +20,7 @@ public class Movement : MonoBehaviour
 
     [SerializeField] private Transform Center;
 
-    [SerializeField] private Global Global;
+    [SerializeField] private Global.Global Global;
 
     public float gravityAcceleration;
 

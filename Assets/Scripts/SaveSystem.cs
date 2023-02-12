@@ -4,41 +4,38 @@ using UnityEngine;
 
 public static class SaveSystem
 {
-    public static void SaveGlobals(Global g)
+    private static string Path = Application.dataPath + "/globals.txt";
+    
+    public static void Save(Global.Global g)
     {
-        var path = Application.dataPath + "/globals.txt";
-        string[] textLines = {g.volume + "", g.fov + "", g.sensitivity + ""};
+        string text = g.volume + "\n" + g.fov + "\n" + g.sensitivity;
+        
+        TextWriter sw = new StreamWriter(Path);
 
-        File.CreateText(path);
-        var sw = new StreamWriter(path);
-
-        foreach (var line in textLines) sw.WriteLine(line);
+        sw.Write(text);
 
         sw.Close();
     }
 
-    public static Global LoadGlobals()
+    public static GameData Load()
     {
-        var path = Application.persistentDataPath + "/globals.txt";
         var lines = new List<string>();
         var line = "";
 
-        StreamReader sr;
+        TextReader sr;
 
         try
         {
-            sr = new StreamReader(path);
+            sr = new StreamReader(Path);
+            while ((line = sr.ReadLine()) != null) lines.Add(line);
         }
         catch (FileNotFoundException e)
         {
-            File.CreateText(path);
-            return ScriptableObject.CreateInstance<Global>();
+            return new GameData();
         }
-
-        while ((line = sr.ReadLine()) != null) lines.Add(line);
 
         sr.Close();
 
-        return ScriptableObject.CreateInstance<Global>();
+        return new GameData(float.Parse(lines[0]), float.Parse(lines[1]), float.Parse(lines[2]));
     }
 }

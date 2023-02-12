@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414729, b: 0.121078685, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1240,7 +1240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 1435464369}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &522076428
@@ -3132,13 +3132,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6eb4fcd28eab3144bf507bf851b6004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Global: {fileID: 11400000, guid: 3c2239387d362db42a0043d0a12accbd, type: 2}
-  VolumeSlider: {fileID: 597532640}
   FOVSlider: {fileID: 79780748}
-  SensSlider: {fileID: 1621108698}
-  VolumeSliderValue: {fileID: 1031896989}
   FOVSliderValue: {fileID: 1658168651}
+  Global: {fileID: 11400000, guid: 3c2239387d362db42a0043d0a12accbd, type: 2}
+  SensSlider: {fileID: 1621108698}
   SensSliderValue: {fileID: 733785406}
+  VolumeSlider: {fileID: 597532640}
+  VolumeSliderValue: {fileID: 1031896989}
 --- !u!4 &1685167269
 Transform:
   m_ObjectHideFlags: 0
