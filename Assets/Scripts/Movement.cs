@@ -1,14 +1,11 @@
 using UnityEngine;
 
 public class Movement : MonoBehaviour
-{
-    // Constant multiplier that matches mouse sensitivity values to other similar games
-    private const float StandardMultiplier = 60f;
-    private int _gravityDirection;
-    private bool _grounded;
-
+{    
     // Private values that change every frame based on rotation & collisions
     private int _playerOrientation;
+    private int _gravityDirection;
+    private bool _grounded;
 
     // Velocity applied to player each frame
     private Vector3 _velocity;
@@ -16,27 +13,28 @@ public class Movement : MonoBehaviour
     // Rotation value about x axis of camera
     private float _verticalRotation;
 
+    // Objects from game scene that need to be referenced by this class
     [SerializeField] private Transform Camera;
 
     [SerializeField] private Transform Center;
 
     [SerializeField] private Global.Global Global;
-
-    public float gravityAcceleration;
-
+    
     [SerializeField] private LayerMask Ground;
-
-    public float jumpSpeed;
-
-    // Objects from game scene that need to be referenced by this class
+    
     [SerializeField] private CharacterController Player;
 
     [SerializeField] private LayerMask User;
 
-    // Multiplier values initialized in Unity script menu
+    // Coefficient values initialized in Unity script menu
     public float walkSpeed;
+    public float gravityAcceleration;
+    public float jumpSpeed;
+    
+    // Constant multiplier that matches mouse sensitivity values to other similar games
+    private const float StandardMultiplier = 60f;
 
-    // Runs before first frame
+    // Runs once before first frame
     private void Start()
     {
         // Assigns CharacterController component of the object this script is assigned to to variable Player

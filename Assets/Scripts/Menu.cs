@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
+    
     [SerializeField] private Slider FOVSlider;
 
     [SerializeField] private TextMeshProUGUI FOVSliderValue;
@@ -19,8 +20,10 @@ public class Menu : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI VolumeSliderValue;
 
+    
     private GameData _game;
 
+    
     private void Start()
     {
         _game = SaveSystem.Load();
@@ -34,6 +37,7 @@ public class Menu : MonoBehaviour
         SensSlider.value = Global.sensitivity;
     }
 
+    
     private void Update()
     {
         Global.volume = VolumeSlider.value;
