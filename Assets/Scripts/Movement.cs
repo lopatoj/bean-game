@@ -1,59 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField]
-    private Global Global;
+    // Constant multiplier that matches mouse sensitivity values to other similar games
+    private const float StandardMultiplier = 60f;
+    private int _gravityDirection;
+    private bool _grounded;
+
+    // Private values that change every frame based on rotation & collisions
+    private int _playerOrientation;
+
+    // Velocity applied to player each frame
+    private Vector3 _velocity;
+
+    // Rotation value about x axis of camera
+    private float _verticalRotation;
+
+    [SerializeField] private Transform Camera;
+
+    [SerializeField] private Transform Center;
+
+    [SerializeField] private Global Global;
+
+    public float gravityAcceleration;
+
+    [SerializeField] private LayerMask Ground;
+
+    public float jumpSpeed;
 
     // Objects from game scene that need to be referenced by this class
-    [SerializeField]
-    private CharacterController Player;
-    [SerializeField]
-    private Transform Camera;
-    [SerializeField]
-    private Transform Center;
-    [SerializeField]
-    private LayerMask Ground;
-    [SerializeField]
-    private LayerMask User;
+    [SerializeField] private CharacterController Player;
+
+    [SerializeField] private LayerMask User;
 
     // Multiplier values initialized in Unity script menu
     public float walkSpeed;
-    public float gravityAcceleration;
-    public float jumpSpeed;
-
-    // Velocity applied to player each frame
-    private Vector3 velocity;
-
-    // Rotation value about x axis of camera
-    private float verticalRotation;
-
-    // Private values that change every frame based on rotation & collisions
-    private int playerOrientation;
-    private int gravityDirection;
-    private bool grounded;
-    
-    // Constant multiplier that matches mouse sensitivity values to other similar games
-    private const float standardMultiplier = 60f;
 
     // Runs before first frame
-    void Start()
+    private void Start()
     {
         // Assigns CharacterController component of the object this script is assigned to to variable Player
         Player = GetComponent<CharacterController>();
 
-        verticalRotation = 0f;
-        playerOrientation = 1;
-        gravityDirection = 1;
-        grounded = false;
+        _verticalRotation = 0f;
+        _playerOrientation = 1;
+        _gravityDirection = 1;
+        _grounded = false;
     }
 
     // Runs every frame
-    void Update()
+    private void Update()
     {
         //Debug.Log("playerOrientation: " + (playerOrientation == 1 ? "Up" : "Down"));
         //Debug.Log("gravityDirection: " + (gravityDirection == 1 ? "Up" : "Down"));
@@ -71,110 +67,94 @@ public class Movement : MonoBehaviour
         Jumping();
 
         // Applies velocity to player multiplied by time passed since last frame
-        Player.Move(velocity * Time.deltaTime);
+        Player.Move(_velocity * Time.deltaTime);
     }
 
     private void OrientationCheck()
     {
         // While loops make sure verticalRotation is between 0 and 360
-        while (verticalRotation < 0f)
-        {
-            verticalRotation += 360f;
-        }
+        while (_verticalRotation < 0f) _verticalRotation += 360f;
 
-        while (verticalRotation > 360f)
-        {
-            verticalRotation -= 360f;
-        }
+        while (_verticalRotation > 360f) _verticalRotation -= 360f;
 
         //Debug.Log(verticalRotation % 360);
 
         // If Camera is facing forward relative to Player, then orientation = 1, else orientation = -1
-        if (verticalRotation < 90f ^ verticalRotation > 270f)
-        {
-            playerOrientation = 1;
-        }
-        else if (verticalRotation > 90f && verticalRotation < 270f)
-        {
-            playerOrientation = -1;
-        }
+        if ((_verticalRotation < 90f) ^ (_verticalRotation > 270f))
+            _playerOrientation = 1;
+        else if (_verticalRotation > 90f && _verticalRotation < 270f) _playerOrientation = -1;
 
         // If Camera is facing up relative to Player, then orientation = 1, else orientation = -1
-        if (verticalRotation > 180f && verticalRotation < 360f)
-        {
-            gravityDirection = 1;
-        }
-        else if (verticalRotation > 0f && verticalRotation < 180f)
-        {
-            gravityDirection = -1;
-        }
+        if (_verticalRotation > 180f && _verticalRotation < 360f)
+            _gravityDirection = 1;
+        else if (_verticalRotation > 0f && _verticalRotation < 180f) _gravityDirection = -1;
     }
 
     private void BoundsCheck()
     {
-        if(Physics.CheckSphere(Vector3.zero, 3f, User))
+        if (Physics.CheckSphere(Vector3.zero, 3f, User))
             return;
-            
+
         transform.Translate(Center.position - transform.position);
     }
 
     // If any object of the layer Ground is present beneath Player, then Player is standing on ground and therefore grounded = true, else grounded = false
     private void CollisionCheck()
     {
-        grounded = Physics.CheckSphere(transform.position - transform.up * playerOrientation, .1f, Ground);
+        var t = transform;
+
+        _grounded = Physics.CheckSphere(t.position - t.up * _playerOrientation, .1f, Ground);
     }
 
     // Rotates camera vertically (about x axis) based on mouse Y movement and rotates player horizontally (about y axis) based on mouse X movement
     private void Looking()
     {
-        float x = Input.GetAxis("Mouse X") * Global.sensitivity * standardMultiplier * Time.deltaTime;
-        float y = Input.GetAxis("Mouse Y") * Global.sensitivity * standardMultiplier * Time.deltaTime;
+        var x = Input.GetAxis("Mouse X") * Global.sensitivity * StandardMultiplier * Time.deltaTime;
+        var y = Input.GetAxis("Mouse Y") * Global.sensitivity * StandardMultiplier * Time.deltaTime;
 
-        verticalRotation -= y;
+        _verticalRotation -= y;
 
-        Camera.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * x * playerOrientation);
+        Camera.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * (_playerOrientation * x));
     }
 
     // Translates player horizontally if W-A-S-D keys are pressed
     private void Walking()
     {
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical") * playerOrientation;
+        var h = Input.GetAxis("Horizontal");
+        var v = Input.GetAxis("Vertical") * _playerOrientation;
 
-        Vector3 move = transform.forward * v + transform.right * h;
+        var t = transform;
+        var move = t.forward * v + t.right * h;
 
-        velocity.x = move.x * walkSpeed;
-        velocity.z = move.z * walkSpeed;
+        _velocity.x = move.x * walkSpeed;
+        _velocity.z = move.z * walkSpeed;
     }
 
     // If Player is standing on Ground and space key is pressed, then Y velocity is set to the initial jump speed * orientation of Player
     private void Jumping()
     {
-        if (grounded && Input.GetButton("Jump"))
-        {
-            velocity.y = jumpSpeed * playerOrientation;
-        }
+        if (_grounded && Input.GetButton("Jump")) _velocity.y = jumpSpeed * _playerOrientation;
     }
 
     // If Player is not standing on Ground, then apply gravitational acceleration relative to orientation of player
     private void Falling()
     {
-        if (grounded && gravityDirection != playerOrientation)
+        if (_grounded && _gravityDirection != _playerOrientation)
         {
-            velocity.y = 0f;
+            _velocity.y = 0f;
         }
         else
         {
-            velocity.y -= gravityAcceleration * playerOrientation * Time.deltaTime;
+            _velocity.y -= gravityAcceleration * _playerOrientation * Time.deltaTime;
 
-            // Air Resistence
-            velocity.y -= .4f * velocity.y * Time.deltaTime;
+            // Air Resistance
+            _velocity.y -= .4f * _velocity.y * Time.deltaTime;
         }
     }
 
     public Vector3 GetVelocity()
     {
-        return velocity;
+        return _velocity;
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,24 +5,21 @@ using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
-    [SerializeField]
-    private Global Global;
+    [SerializeField] private Slider FOVSlider;
 
-    [SerializeField]
-    private Slider VolumeSlider;
-    [SerializeField]
-    private Slider FOVSlider;
-    [SerializeField]
-    private Slider SensSlider;
+    [SerializeField] private TextMeshProUGUI FOVSliderValue;
 
-    [SerializeField]
-    private TextMeshProUGUI VolumeSliderValue;
-    [SerializeField]
-    private TextMeshProUGUI FOVSliderValue;
-    [SerializeField]
-    private TextMeshProUGUI SensSliderValue;
+    [SerializeField] private Global Global;
 
-    void Start()
+    [SerializeField] private Slider SensSlider;
+
+    [SerializeField] private TextMeshProUGUI SensSliderValue;
+
+    [SerializeField] private Slider VolumeSlider;
+
+    [SerializeField] private TextMeshProUGUI VolumeSliderValue;
+
+    private void Start()
     {
         //Global = SaveSystem.LoadGlobals();
 
@@ -33,15 +28,15 @@ public class Menu : MonoBehaviour
         SensSlider.value = Global.sensitivity;
     }
 
-    void Update()
+    private void Update()
     {
         Global.volume = VolumeSlider.value;
-        Global.fov = (int)FOVSlider.value;
+        Global.fov = (int) FOVSlider.value;
         Global.sensitivity = SensSlider.value;
 
-        VolumeSliderValue.text = string.Format("{0:0.0}", Global.volume);
+        VolumeSliderValue.text = $"{Global.volume:0.0}";
         FOVSliderValue.text = Global.fov + "";
-        SensSliderValue.text = string.Format("{0:0.0}", Global.sensitivity);
+        SensSliderValue.text = $"{Global.sensitivity:0.0}";
 
         AudioListener.volume = Global.volume;
     }

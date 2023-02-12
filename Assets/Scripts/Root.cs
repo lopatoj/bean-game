@@ -1,28 +1,24 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Root : MonoBehaviour
 {
-    [SerializeField]
-    private Global Global;
-    [SerializeField]
-    private Camera Eyes;
+    [SerializeField] private Camera Eyes;
 
-    private bool paused;
+    [SerializeField] private Global Global;
 
-    void Start()
+    private bool _paused;
+
+    private void Start()
     {
-        paused = false;
+        _paused = false;
 
         // Keeps mouse cursor in center of screen & hides it
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
         Eyes.fieldOfView = Global.fov;
 
@@ -31,31 +27,24 @@ public class Root : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             Time.timeScale = 0;
-            paused = true;
+            _paused = true;
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             Time.timeScale = 1;
-            paused = false;
+            _paused = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Pause();
-        }
+        if (Input.GetKeyDown(KeyCode.Escape)) Pause();
     }
 
-    public void Pause()
+    private void Pause()
     {
-        if(!paused)
-        {
+        if (!_paused)
             SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
-        }
         else
-        { 
             SceneManager.UnloadSceneAsync(1);
-        }
     }
 }
