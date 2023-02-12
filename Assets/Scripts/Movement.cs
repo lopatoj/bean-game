@@ -16,8 +16,6 @@ public class Movement : MonoBehaviour
     // Objects from game scene that need to be referenced by this class
     [SerializeField] private Transform Camera;
 
-    [SerializeField] private Transform Center;
-
     [SerializeField] private Global.Global Global;
     
     [SerializeField] private LayerMask Ground;
@@ -90,10 +88,9 @@ public class Movement : MonoBehaviour
 
     private void BoundsCheck()
     {
-        if (Physics.CheckSphere(Vector3.zero, 3f, User))
-            return;
+        if (Physics.CheckSphere(Vector3.zero, 3f, User)) return;
 
-        transform.Translate(Center.position - transform.position);
+        transform.Translate(Vector3.zero - transform.position);
     }
 
     // If any object of the layer Ground is present beneath Player, then Player is standing on ground and therefore grounded = true, else grounded = false

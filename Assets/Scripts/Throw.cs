@@ -13,6 +13,8 @@ public class Throw : MonoBehaviour
 
     [SerializeField] private Transform Hand;
 
+    [SerializeField] private Transform Direction;
+
     [SerializeField] private float lifetime;
 
     [SerializeField] private GameObject Player;
@@ -53,7 +55,7 @@ public class Throw : MonoBehaviour
 
         // Propels the bean
         b.GetComponent<Rigidbody>()
-            .AddForce(transform.forward * force + Player.GetComponent<CharacterController>().velocity,
+            .AddForce(Direction.forward * force + Player.GetComponent<CharacterController>().velocity,
                 ForceMode.VelocityChange);
         
         // Spins the bean
