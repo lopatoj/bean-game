@@ -31,6 +31,7 @@ public class Throw : MonoBehaviour
     // Runs once before first frame
     private void Start()
     {
+        // 
         _throwTimer = 0f;
         _count = count;
     }
@@ -75,11 +76,13 @@ public class Throw : MonoBehaviour
         Destroy(b, lifetime);
     }
 
+    // Increase bean count
     public void Add()
     {
         count++;
     }
 
+    // return throw timer value
     public float GetTimer()
     {
         return _throwTimer;
