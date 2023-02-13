@@ -19,10 +19,9 @@ public class EnemyHandler : MonoBehaviour
 
     private void AddCat()
     {
-        GameObject c = Instantiate(Cat);
+        GameObject c = Instantiate(Cat, Vector3.zero, Quaternion.identity);
         c.GetComponent<Enemy>().health = health;
         c.GetComponent<Enemy>().Handler = this;
-        c.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
 
     public void Death()
