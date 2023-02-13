@@ -8,6 +8,8 @@ public class Root : MonoBehaviour
 
     [SerializeField] private Global.Global Global;
 
+    [SerializeField] private Canvas HUD;
+
     // Private value that changes depending on keyboard input
     private bool _paused;
 
@@ -33,6 +35,8 @@ public class Root : MonoBehaviour
             // Allow cursor to be visible and to move
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
+            HUD.enabled = false;
             
             // Halt in-game time
             Time.timeScale = 0;
@@ -43,6 +47,8 @@ public class Root : MonoBehaviour
             // Hide cursor
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            
+            HUD.enabled = true;
             
             // Resume in-game time
             Time.timeScale = 1;

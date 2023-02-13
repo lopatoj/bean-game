@@ -39,7 +39,7 @@ public class Throw : MonoBehaviour
     private void Update()
     {
         // If left click pressed and throw timer is above the throwing cooldown
-        if (Input.GetAxis("Fire1") >= 1 && _throwTimer > cooldown && count > 0)
+        if (Input.GetButtonDown("Fire1") && _throwTimer > cooldown && count > 0)
         {
             // Launch the bean
             Action launch = Launch;
@@ -73,5 +73,15 @@ public class Throw : MonoBehaviour
 
         // Ends the bean
         Destroy(b, lifetime);
+    }
+
+    public void Add()
+    {
+        count++;
+    }
+
+    public float GetTimer()
+    {
+        return _throwTimer;
     }
 }
