@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour
         if (_lastTime != _thisTime)
         {
             GetComponent<Rigidbody>().AddForce((_player.transform.position - transform.position).normalized * Speed);
+            
         }
 
         _lastTime = _thisTime;
@@ -50,9 +51,11 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision c)
     {
+        Debug.Log("collision");
         if (c.gameObject.layer == Ground)
         {
             GetComponent<AudioSource>().PlayOneShot(Thud);
+            Debug.Log("ground");
         }
         else if (c.gameObject.layer == Bean)
         {
@@ -63,6 +66,7 @@ public class Enemy : MonoBehaviour
         }
         else if (c.gameObject.layer == Player)
         {
+            Debug.Log("player");
             GetComponent<AudioSource>().PlayOneShot(Pop);
 
             c.gameObject.GetComponent<Health>().Remove();
