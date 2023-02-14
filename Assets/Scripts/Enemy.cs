@@ -51,31 +51,30 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision c)
     {
-        Debug.Log("collision");
-        if (c.gameObject.layer == Ground)
+        var a = GetComponent<AudioSource>();
+        
+        if (c.gameObject.name == "Terrain")
         {
-            GetComponent<AudioSource>().PlayOneShot(Thud);
-            Debug.Log("ground");
+            a.PlayOneShot(Thud, .2f);
         }
-        else if (c.gameObject.layer == Bean)
+        else if (c.gameObject.name == "Bean")
         {
-            GetComponent<AudioSource>().PlayOneShot(Hit);
+            Debug.Log("Bean");
+            a.PlayOneShot(Hit);
             health--;
-            
-            Debug.Log("bean");
         }
-        else if (c.gameObject.layer == Player)
+        else if (c.gameObject.name == "Player")
         {
-            Debug.Log("player");
-            GetComponent<AudioSource>().PlayOneShot(Pop);
+            a.PlayOneShot(Pop, .7f);
 
             c.gameObject.GetComponent<Health>().Remove();
         }
         
         if (health < 1)
         {
+            Debug.Log("kill");
             Handler.Death();
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 }

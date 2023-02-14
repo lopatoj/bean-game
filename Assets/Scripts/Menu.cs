@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
+
+    [SerializeField] private Global.Global Global;
     
     [SerializeField] private Slider FOVSlider;
 
     [SerializeField] private TextMeshProUGUI FOVSliderValue;
-
-    [SerializeField] private Global.Global Global;
 
     [SerializeField] private Slider SensSlider;
 
