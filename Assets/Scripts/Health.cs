@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    // Objects from game scene that need to be referenced by this class
     [SerializeField] private int initialHealth;
 
     [SerializeField] private TextMeshProUGUI Text;
     
+    // Health variable
     private int _health;
     
     // Start is called before the first frame update
@@ -23,6 +25,7 @@ public class Health : MonoBehaviour
         Text.text = $"You have {_health} health left!";
     }
     
+    // Subtract from health
     public void Remove()
     {
         _health--;

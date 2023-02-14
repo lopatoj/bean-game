@@ -38,6 +38,7 @@ public class Movement : MonoBehaviour
         // Assigns CharacterController component of the object this script is assigned to to variable Player
         Player = GetComponent<CharacterController>();
 
+        // Sets intitial instance variables
         _verticalRotation = 0f;
         _playerOrientation = 1;
         _gravityDirection = 1;
@@ -86,10 +87,13 @@ public class Movement : MonoBehaviour
         else if (_verticalRotation > 0f && _verticalRotation < 180f) _gravityDirection = -1;
     }
 
+    // If player is more than 300
     private void BoundsCheck()
     {
-        if (Physics.CheckSphere(Vector3.zero, 3f, User)) return;
+        // Return if player is within sphere
+        if (Physics.CheckSphere(Vector3.zero, 300f, User)) return;
 
+        // Move player to center of circle if outside of circle
         transform.Translate(Vector3.zero - transform.position);
     }
 
@@ -98,30 +102,39 @@ public class Movement : MonoBehaviour
     {
         var t = transform;
 
+        // Check if ground exists at player feet
         _grounded = Physics.CheckSphere(t.position - t.up * _playerOrientation, .1f, Ground);
     }
 
     // Rotates camera vertically (about x axis) based on mouse Y movement and rotates player horizontally (about y axis) based on mouse X movement
     private void Looking()
     {
+        // Get input values from mouse
         var x = Input.GetAxis("Mouse X") * Global.sensitivity * StandardMultiplier * Time.deltaTime;
         var y = Input.GetAxis("Mouse Y") * Global.sensitivity * StandardMultiplier * Time.deltaTime;
 
+        // Set change vertical rotation based on mouse y movement
         _verticalRotation -= y;
 
+        // Rotate camera by y rotation
         Camera.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
+
+        // Rotate player horizontally
         transform.Rotate(Vector3.up * (_playerOrientation * x));
     }
 
     // Translates player horizontally if W-A-S-D keys are pressed
     private void Walking()
     {
+        // Get input values from keyboard
         var h = Input.GetAxis("Horizontal");
         var v = Input.GetAxis("Vertical") * _playerOrientation;
 
+        // Creates movement vector
         var t = transform;
         var move = t.forward * v + t.right * h;
 
+        // Sets horizontal velocity to movement vector
         _velocity.x = move.x * walkSpeed;
         _velocity.z = move.z * walkSpeed;
     }
@@ -148,6 +161,7 @@ public class Movement : MonoBehaviour
         }
     }
 
+    // Return velocity vector
     public Vector3 GetVelocity()
     {
         return _velocity;
