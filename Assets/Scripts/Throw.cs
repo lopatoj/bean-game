@@ -23,6 +23,8 @@ public class Throw : MonoBehaviour
     [SerializeField] private GameObject Player;
 
     [SerializeField] private TextMeshProUGUI CountText;
+    
+    [SerializeField] private AudioClip shoot;
 
     // Private timer value that increases with time
     private float _throwTimer;
@@ -63,6 +65,8 @@ public class Throw : MonoBehaviour
     {
         // Creates the bean
         var b = Instantiate(Bean, Hand.position, Random.rotation);
+
+        Player.GetComponent<AudioSource>().PlayOneShot(shoot);
 
         // Propels the bean
         b.GetComponent<Rigidbody>()

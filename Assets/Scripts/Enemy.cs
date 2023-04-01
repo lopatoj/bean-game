@@ -67,32 +67,34 @@ public class Enemy : MonoBehaviour
     {
         var a = GetComponent<AudioSource>();
         
-        if (c.gameObject.name == "Terrain")
+        if (health == 0)
         {
-            a.PlayOneShot(Thud, .2f);
-        }
-        else if (c.gameObject.name == "Player")
-        {
-            a.PlayOneShot(Pop, .7f);
-
-            c.gameObject.GetComponent<Health>().Remove();
-        }
-        else if (c.gameObject.CompareTag("Bean"))
-        {
-            Debug.Log("Health now: " + health);
-            a.PlayOneShot(Hit);
-            health--;
-        }
-        
-
-        if (health < 1)
-        {
+            health = -1;
             Debug.Log("kill");
             Handler.Death();
             GetComponent<MeshRenderer>().enabled = false;
             a.PlayOneShot(Explosion);
             Explode.Play();
-            Destroy(this.gameObject, 1);
+            Destroy(this.gameObject, 1f);
+        }
+        else
+        {
+            if (c.gameObject.name == "Terrain")
+            {
+                a.PlayOneShot(Thud, .2f);
+            }
+            else if (c.gameObject.name == "Player")
+            {
+                a.PlayOneShot(Pop, .7f);
+
+                c.gameObject.GetComponent<Health>().Remove();
+            }
+            else if (c.gameObject.CompareTag("Bean"))
+            {
+                Debug.Log("Health now: " + health);
+                a.PlayOneShot(Hit);
+                health--;
+            }
         }
     }
 }
