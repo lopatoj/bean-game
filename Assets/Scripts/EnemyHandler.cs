@@ -8,12 +8,12 @@ public class EnemyHandler : MonoBehaviour
 
     [SerializeField] private int health;
 
-    private int _wave;
+    private float _wave;
     
     // Start is called before the first frame update
     void Start()
     {
-        _wave = 5;
+        _wave = 1;
         Death();
     }
 
@@ -26,11 +26,14 @@ public class EnemyHandler : MonoBehaviour
 
     public void Death()
     {
-        for (int i = 0; i < _wave; i++)
+        if (_wave < 100)
         {
-            AddCat();
-        }
+            for (int i = 0; i < _wave || i < 50; i++)
+            {
+                AddCat();
+            }
 
-        _wave++;
+            _wave += .1f;
+        }
     }
 }

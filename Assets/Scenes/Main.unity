@@ -1559,4 +1559,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cat: {fileID: 6895521114711892563, guid: 67737cdb50f922b5888416342917e134, type: 3}
-  health: 3
+  health: 4

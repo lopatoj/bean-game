@@ -12,8 +12,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private LayerMask Ground;
     
     [SerializeField] private LayerMask Player;
-    
+
     [SerializeField] private LayerMask Bean;
+
+    [SerializeField] private ParticleSystem Explode;
 
     [SerializeField] private AudioClip Thud;
     
@@ -21,8 +23,11 @@ public class Enemy : MonoBehaviour
     
     [SerializeField] private AudioClip Pop;
 
+    [SerializeField] private AudioClip Explosion;
+
     // Player object in scene
     private GameObject _player;
+    private Rigidbody _rigidbody;
 
     // Time instance variables
     private int _thisTime;
@@ -37,6 +42,7 @@ public class Enemy : MonoBehaviour
     {
         // Finds player object in scene
         _player = GameObject.FindWithTag("Player");
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -49,7 +55,7 @@ public class Enemy : MonoBehaviour
         if (_lastTime != _thisTime)
         {
             // Add force in direction of player
-            GetComponent<Rigidbody>().AddForce((_player.transform.position - transform.position).normalized * Speed);
+            _rigidbody.AddForce((_player.transform.position - transform.position).normalized * Speed);
         }
 
         // Sets last time for time comparison in next frame
@@ -65,24 +71,28 @@ public class Enemy : MonoBehaviour
         {
             a.PlayOneShot(Thud, .2f);
         }
-        else if (c.gameObject.name == "Bean")
-        {
-            Debug.Log("Bean");
-            a.PlayOneShot(Hit);
-            health--;
-        }
         else if (c.gameObject.name == "Player")
         {
             a.PlayOneShot(Pop, .7f);
 
             c.gameObject.GetComponent<Health>().Remove();
         }
+        else if (c.gameObject.CompareTag("Bean"))
+        {
+            Debug.Log("Health now: " + health);
+            a.PlayOneShot(Hit);
+            health--;
+        }
         
+
         if (health < 1)
         {
             Debug.Log("kill");
             Handler.Death();
-            Destroy(this.gameObject);
+            GetComponent<MeshRenderer>().enabled = false;
+            a.PlayOneShot(Explosion);
+            Explode.Play();
+            Destroy(this.gameObject, 1);
         }
     }
 }
