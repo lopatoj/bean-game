@@ -35,6 +35,9 @@ public class Menu : MonoBehaviour
         VolumeSlider.value = Global.volume;
         FOVSlider.value = Global.fov;
         SensSlider.value = Global.sensitivity;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     

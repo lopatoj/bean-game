@@ -13,12 +13,15 @@ public class EnemyHandler : MonoBehaviour
 
     private float _wave;
     private int _score;
+    public bool increasing;
     
     // Start is called before the first frame update
     void Start()
     {
         _wave = 1;
         _score = -1;
+        increasing = true;
+        
         Death();
     }
 
@@ -34,7 +37,7 @@ public class EnemyHandler : MonoBehaviour
 
     public void Death()
     {
-        _score++;
+        if(increasing) _score++;
         
         if (_wave < 20)
         {

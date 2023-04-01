@@ -40,13 +40,17 @@ public class Health : MonoBehaviour
             Over.enabled = true;
             GetComponentInParent<Movement>().enabled = false;
             GetComponentInChildren<Throw>().enabled = false;
+            GetComponent<EnemyHandler>().increasing = false;
 
-            WaitForSeconds a = new WaitForSeconds(5);
-
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            SceneManager.LoadSceneAsync(0);
+            StartCoroutine(Main());
         }
+    }
+
+    IEnumerator Main()
+    {
+        yield return new WaitForSeconds(5);
+            
+        SceneManager.LoadSceneAsync(0);
     }
     
     // Subtract from health
